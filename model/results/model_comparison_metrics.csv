@@ -1,0 +1,5 @@
+﻿Model,Accuracy (%),Balanced Acc (%),Macro F1 (%),Weighted F1 (%),Macro Precision (%),Macro Recall (%),Train Time (s)
+Naive Bayes (ComplementNB),96.7,96.57,96.35,96.72,96.22,96.57,0.31
+Naive Bayes (MultinomialNB),96.83,96.33,96.45,96.85,96.65,96.33,0.31
+Support Vector Machine (LinearSVC),97.46,97.0,97.19,97.47,97.41,97.0,0.5
+Logistic Regression (Baseline),97.41,96.94,97.14,97.42,97.36,96.94,0.72

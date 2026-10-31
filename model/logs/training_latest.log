@@ -1,0 +1,157 @@
+[2026-10-23 20:22:28] [INFO] ================================================================================
+[2026-10-23 20:22:28] [INFO] === KHOI DONG PIPELINE HUAN LUYEN VA DANH GIA SUPPORT TICKET ROUTER ===
+[2026-10-23 20:22:28] [INFO] ================================================================================
+[2026-10-23 20:22:28] [INFO] [LOG] File duoc luu tai: D:\FPTU\26FALL\TMG301\project\model\logs\training_20261023_202228.log
+[2026-10-23 20:22:28] [INFO] 📂 Đang đọc dữ liệu từ: D:\FPTU\26FALL\TMG301\project\processed_datasets\combined_dataset.csv
+[2026-10-23 20:22:28] [INFO] Tổng số dòng ban đầu: 39,955
+[2026-10-23 20:22:28] [INFO] ✅ Dữ liệu sau kiểm tra: 39,955 mẫu hợp lệ.
+[2026-10-23 20:22:28] [INFO] 📊 Phân bố các lớp tổng quan:
+[2026-10-23 20:22:28] [INFO]   - Technical Issue    (Lỗi kỹ thuật): 22,943 mẫu (57.42%) -> Phòng Hỗ trợ Kỹ thuật (Technical Support Dept)
+[2026-10-23 20:22:28] [INFO]   - Payment            (Thanh toán & Giao dịch): 11,010 mẫu (27.56%) -> Phòng Kế toán & Thanh toán (Billing & Finance Dept)
+[2026-10-23 20:22:28] [INFO]   - Return/Refund      (Đổi trả & Hoàn tiền):  6,002 mẫu (15.02%) -> Phòng CSKH & Đổi trả (Customer Care & Refund Dept)
+[2026-10-23 20:22:28] [INFO] --------------------------------------------------------------------------------
+[2026-10-23 20:22:28] [INFO] ✂️  TIẾN HÀNH PHÂN CHIA DỮ LIỆU: TRAIN (70%) - VAL (15%) - TEST (15%)
+[2026-10-23 20:22:28] [INFO] --------------------------------------------------------------------------------
+[2026-10-23 20:22:28] [INFO] ✅ Số lượng mẫu tập Train:      27,967 (70.00%)
+[2026-10-23 20:22:28] [INFO] ✅ Số lượng mẫu tập Validation:  5,994 (15.00%)
+[2026-10-23 20:22:28] [INFO] ✅ Số lượng mẫu tập Test:        5,994 (15.00%)
+[2026-10-23 20:22:28] [INFO]   • Payment          | Train: 7,706 (27.55%) | Val: 1,652 (27.56%) | Test: 1,652 (27.56%)
+[2026-10-23 20:22:28] [INFO]   • Return/Refund    | Train: 4,202 (15.02%) | Val:   900 (15.02%) | Test:   900 (15.02%)
+[2026-10-23 20:22:28] [INFO]   • Technical Issue  | Train: 16,059 (57.42%) | Val: 3,442 (57.42%) | Test: 3,442 (57.42%)
+[2026-10-23 20:22:28] [INFO] 📊 Đã lưu biểu đồ phân bố dữ liệu: D:\FPTU\26FALL\TMG301\project\model\plots\dataset_split_distribution.png
+[2026-10-23 20:22:28] [INFO] ================================================================================
+[2026-10-23 20:22:28] [INFO] ⚙️  TIẾN HÀNH TRÍCH XUẤT ĐẶC TRƯNG TF-IDF & ĐÁNH GIÁ TRÊN TẬP VALIDATION
+[2026-10-23 20:22:28] [INFO] ================================================================================
+[2026-10-23 20:22:28] [INFO] Trích xuất đặc trưng văn bản bằng TF-IDF:
+[2026-10-23 20:22:28] [INFO]   - N-gram range: (1, 2)
+[2026-10-23 20:22:28] [INFO]   - Max features: 12000
+[2026-10-23 20:22:28] [INFO]   - Sublinear TF: True
+[2026-10-23 20:22:28] [INFO] ✅ Đã tạo ma trận TF-IDF: Kích thước từ vựng (Vocabulary size) = 9,899 trong 0.26s
+[2026-10-23 20:22:28] [INFO]   - Shape X_train_vec: (27967, 9899)
+[2026-10-23 20:22:28] [INFO]   - Shape X_val_vec:   (5994, 9899)
+[2026-10-23 20:22:28] [INFO] ------------------------------------------------------------
+[2026-10-23 20:22:28] [INFO] 🔍 Thử nghiệm siêu tham số cho MultinomialNB:
+[2026-10-23 20:22:28] [INFO]   • alpha=0.001 | Train Acc:  98.28% | Val Acc:  97.06% | Val Macro-F1:  96.76%
+[2026-10-23 20:22:28] [INFO]   • alpha=0.01  | Train Acc:  98.17% | Val Acc:  97.08% | Val Macro-F1:  96.79%
+[2026-10-23 20:22:28] [INFO]   • alpha=0.05  | Train Acc:  98.07% | Val Acc:  97.01% | Val Macro-F1:  96.71%
+[2026-10-23 20:22:29] [INFO]   • alpha=0.1   | Train Acc:  97.96% | Val Acc:  96.95% | Val Macro-F1:  96.62%
+[2026-10-23 20:22:29] [INFO]   • alpha=0.5   | Train Acc:  97.45% | Val Acc:  96.71% | Val Macro-F1:  96.36%
+[2026-10-23 20:22:29] [INFO]   • alpha=1.0   | Train Acc:  97.17% | Val Acc:  96.50% | Val Macro-F1:  96.07%
+[2026-10-23 20:22:29] [INFO]   • alpha=2.0   | Train Acc:  96.82% | Val Acc:  96.21% | Val Macro-F1:  95.62%
+[2026-10-23 20:22:29] [INFO]   🏆 Tối ưu nhất MultinomialNB: alpha=0.01 (Val Macro-F1: 96.79%)
+[2026-10-23 20:22:29] [INFO] ------------------------------------------------------------
+[2026-10-23 20:22:29] [INFO] 🔍 Thử nghiệm siêu tham số cho ComplementNB:
+[2026-10-23 20:22:29] [INFO]   • alpha=0.001 | Train Acc:  98.15% | Val Acc:  97.15% | Val Macro-F1:  96.85%
+[2026-10-23 20:22:29] [INFO]   • alpha=0.01  | Train Acc:  98.08% | Val Acc:  97.21% | Val Macro-F1:  96.94%
+[2026-10-23 20:22:29] [INFO]   • alpha=0.05  | Train Acc:  97.97% | Val Acc:  97.08% | Val Macro-F1:  96.81%
+[2026-10-23 20:22:29] [INFO]   • alpha=0.1   | Train Acc:  97.85% | Val Acc:  97.03% | Val Macro-F1:  96.75%
+[2026-10-23 20:22:29] [INFO]   • alpha=0.5   | Train Acc:  97.20% | Val Acc:  96.70% | Val Macro-F1:  96.46%
+[2026-10-23 20:22:29] [INFO]   • alpha=1.0   | Train Acc:  96.85% | Val Acc:  96.30% | Val Macro-F1:  96.02%
+[2026-10-23 20:22:29] [INFO]   • alpha=2.0   | Train Acc:  96.54% | Val Acc:  96.10% | Val Macro-F1:  95.81%
+[2026-10-23 20:22:29] [INFO]   🏆 Tối ưu nhất ComplementNB: alpha=0.01 (Val Macro-F1: 96.94%)
+[2026-10-23 20:22:29] [INFO] ------------------------------------------------------------
+[2026-10-23 20:22:29] [INFO] 🔍 Thử nghiệm siêu tham số cho Support Vector Machine (LinearSVC):
+[2026-10-23 20:22:29] [INFO]   • C=0.01  | Train Acc:  94.54% | Val Acc:  94.39% | Val Macro-F1:  93.65%
+[2026-10-23 20:22:29] [INFO]   • C=0.05  | Train Acc:  97.30% | Val Acc:  96.78% | Val Macro-F1:  96.46%
+[2026-10-23 20:22:29] [INFO]   • C=0.1   | Train Acc:  98.00% | Val Acc:  97.33% | Val Macro-F1:  97.08%
+[2026-10-23 20:22:30] [INFO]   • C=0.5   | Train Acc:  99.09% | Val Acc:  97.56% | Val Macro-F1:  97.37%
+[2026-10-23 20:22:30] [INFO]   • C=1.0   | Train Acc:  99.30% | Val Acc:  97.58% | Val Macro-F1:  97.35%
+[2026-10-23 20:22:30] [INFO]   • C=2.0   | Train Acc:  99.43% | Val Acc:  97.45% | Val Macro-F1:  97.21%
+[2026-10-23 20:22:30] [INFO]   • C=5.0   | Train Acc:  99.59% | Val Acc:  97.11% | Val Macro-F1:  96.79%
+[2026-10-23 20:22:30] [INFO]   • C=10.0  | Train Acc:  99.63% | Val Acc:  96.90% | Val Macro-F1:  96.59%
+[2026-10-23 20:22:30] [INFO]   🏆 Tối ưu nhất LinearSVC: C=0.5 (Val Macro-F1: 97.37%)
+[2026-10-23 20:22:30] [INFO] ------------------------------------------------------------
+[2026-10-23 20:22:30] [INFO] 🔍 Thử nghiệm siêu tham số cho Logistic Regression Baseline:
+[2026-10-23 20:22:31] [INFO]   • C=0.01  | Train Acc:  74.45% | Val Acc:  74.74% | Val Macro-F1:  59.93%
+[2026-10-23 20:22:32] [INFO]   • C=0.1   | Train Acc:  95.32% | Val Acc:  95.13% | Val Macro-F1:  94.44%
+[2026-10-23 20:22:32] [INFO]   • C=0.5   | Train Acc:  97.69% | Val Acc:  97.03% | Val Macro-F1:  96.71%
+[2026-10-23 20:22:33] [INFO]   • C=1.0   | Train Acc:  98.27% | Val Acc:  97.51% | Val Macro-F1:  97.26%
+[2026-10-23 20:22:33] [INFO]   • C=5.0   | Train Acc:  99.10% | Val Acc:  97.55% | Val Macro-F1:  97.32%
+[2026-10-23 20:22:34] [INFO]   • C=10.0  | Train Acc:  99.40% | Val Acc:  97.56% | Val Macro-F1:  97.29%
+[2026-10-23 20:22:34] [INFO]   🏆 Tối ưu nhất LogisticRegression: C=5.0 (Val Macro-F1: 97.32%)
+[2026-10-23 20:22:34] [INFO] 📊 Đã lưu đồ thị Validation Curves: D:\FPTU\26FALL\TMG301\project\model\plots\validation_curves.png
+[2026-10-23 20:22:34] [INFO] ================================================================================
+[2026-10-23 20:22:34] [INFO] 📈 ĐANG TÍNH TOÁN LEARNING CURVE CHO CÁC MÔ HÌNH CHÍNH (TRAIN vs VAL)
+[2026-10-23 20:22:34] [INFO] ================================================================================
+[2026-10-23 20:22:34] [INFO] Đang tính toán Learning Curve cho ComplementNB qua 5 kích thước dữ liệu (5-Fold CV)...
+[2026-10-23 20:22:38] [INFO]   - Samples: 1,864 | Train Acc: 96.91% | Val Acc: 93.69% (Gap: 3.21%)
+[2026-10-23 20:22:38] [INFO]   - Samples: 6,059 | Train Acc: 97.57% | Val Acc: 95.47% (Gap: 2.11%)
+[2026-10-23 20:22:38] [INFO]   - Samples: 10,254 | Train Acc: 97.85% | Val Acc: 95.92% (Gap: 1.94%)
+[2026-10-23 20:22:38] [INFO]   - Samples: 14,449 | Train Acc: 97.97% | Val Acc: 96.21% (Gap: 1.76%)
+[2026-10-23 20:22:38] [INFO]   - Samples: 18,644 | Train Acc: 97.97% | Val Acc: 96.46% (Gap: 1.51%)
+[2026-10-23 20:22:38] [INFO] Đang tính toán Learning Curve cho LinearSVC qua 5 kích thước dữ liệu (5-Fold CV)...
+[2026-10-23 20:22:42] [INFO]   - Samples: 1,864 | Train Acc: 98.71% | Val Acc: 94.91% (Gap: 3.80%)
+[2026-10-23 20:22:42] [INFO]   - Samples: 6,059 | Train Acc: 98.76% | Val Acc: 96.56% (Gap: 2.20%)
+[2026-10-23 20:22:42] [INFO]   - Samples: 10,254 | Train Acc: 98.96% | Val Acc: 96.91% (Gap: 2.05%)
+[2026-10-23 20:22:42] [INFO]   - Samples: 14,449 | Train Acc: 98.97% | Val Acc: 97.25% (Gap: 1.72%)
+[2026-10-23 20:22:42] [INFO]   - Samples: 18,644 | Train Acc: 99.06% | Val Acc: 97.45% (Gap: 1.61%)
+[2026-10-23 20:22:43] [INFO] 📊 Đã lưu đồ thị Learning Curves: D:\FPTU\26FALL\TMG301\project\model\plots\learning_curves.png
+[2026-10-23 20:22:43] [INFO] ================================================================================
+[2026-10-23 20:22:43] [INFO] 🧪 ĐÁNH GIÁ CÁC METRICS TRÊN TẬP TEST ĐỘC LẬP (UNSEEN DATA)
+[2026-10-23 20:22:43] [INFO] ================================================================================
+[2026-10-23 20:22:43] [INFO] Số lượng mẫu huấn luyện mô hình chính thức: 33,961 mẫu
+[2026-10-23 20:22:43] [INFO] Số lượng mẫu kiểm tra tập Test:            5,994 mẫu
+[2026-10-23 20:22:43] [INFO] ---------------------------------------------------------------------------
+[2026-10-23 20:22:43] [INFO] 🚀 Đang huấn luyện & đánh giá: Naive Bayes (ComplementNB)
+[2026-10-23 20:22:43] [INFO]   ⏱️  Thời gian Train: 0.31s | Infer 5994 mẫu: 0.0468s
+[2026-10-23 20:22:43] [INFO]   🎯 Test Accuracy:           96.70%
+[2026-10-23 20:22:43] [INFO]   🎯 Test Balanced Accuracy:  96.57%
+[2026-10-23 20:22:43] [INFO]   🎯 Test Macro F1-Score:     96.35%
+[2026-10-23 20:22:43] [INFO]   🎯 Test Weighted F1-Score:  96.72%
+[2026-10-23 20:22:43] [INFO] 
+  📋 Báo cáo chi tiết từng phòng ban:
+[2026-10-23 20:22:43] [INFO]     • Payment          (Thanh toán & Giao dịch): Precision=91.56% | Recall=97.88% | F1=94.62% | Support=1,652.0
+[2026-10-23 20:22:43] [INFO]     • Return/Refund    (Đổi trả & Hoàn tiền): Precision=98.06% | Recall=95.33% | F1=96.68% | Support=900.0
+[2026-10-23 20:22:43] [INFO]     • Technical Issue  (Lỗi kỹ thuật): Precision=99.05% | Recall=96.48% | F1=97.75% | Support=3,442.0
+[2026-10-23 20:22:43] [INFO] ---------------------------------------------------------------------------
+[2026-10-23 20:22:43] [INFO] 🚀 Đang huấn luyện & đánh giá: Naive Bayes (MultinomialNB)
+[2026-10-23 20:22:43] [INFO]   ⏱️  Thời gian Train: 0.31s | Infer 5994 mẫu: 0.0472s
+[2026-10-23 20:22:43] [INFO]   🎯 Test Accuracy:           96.83%
+[2026-10-23 20:22:43] [INFO]   🎯 Test Balanced Accuracy:  96.33%
+[2026-10-23 20:22:43] [INFO]   🎯 Test Macro F1-Score:     96.45%
+[2026-10-23 20:22:43] [INFO]   🎯 Test Weighted F1-Score:  96.85%
+[2026-10-23 20:22:43] [INFO] 
+  📋 Báo cáo chi tiết từng phòng ban:
+[2026-10-23 20:22:43] [INFO]     • Payment          (Thanh toán & Giao dịch): Precision=92.45% | Recall=97.15% | F1=94.75% | Support=1,652.0
+[2026-10-23 20:22:43] [INFO]     • Return/Refund    (Đổi trả & Hoàn tiền): Precision=98.95% | Recall=94.56% | F1=96.70% | Support=900.0
+[2026-10-23 20:22:43] [INFO]     • Technical Issue  (Lỗi kỹ thuật): Precision=98.53% | Recall=97.27% | F1=97.89% | Support=3,442.0
+[2026-10-23 20:22:43] [INFO] ---------------------------------------------------------------------------
+[2026-10-23 20:22:43] [INFO] 🚀 Đang huấn luyện & đánh giá: Support Vector Machine (LinearSVC)
+[2026-10-23 20:22:44] [INFO]   ⏱️  Thời gian Train: 0.50s | Infer 5994 mẫu: 0.0496s
+[2026-10-23 20:22:44] [INFO]   🎯 Test Accuracy:           97.46%
+[2026-10-23 20:22:44] [INFO]   🎯 Test Balanced Accuracy:  97.00%
+[2026-10-23 20:22:44] [INFO]   🎯 Test Macro F1-Score:     97.19%
+[2026-10-23 20:22:44] [INFO]   🎯 Test Weighted F1-Score:  97.47%
+[2026-10-23 20:22:44] [INFO] 
+  📋 Báo cáo chi tiết từng phòng ban:
+[2026-10-23 20:22:44] [INFO]     • Payment          (Thanh toán & Giao dịch): Precision=95.10% | Recall=96.37% | F1=95.73% | Support=1,652.0
+[2026-10-23 20:22:44] [INFO]     • Return/Refund    (Đổi trả & Hoàn tiền): Precision=98.86% | Recall=96.33% | F1=97.58% | Support=900.0
+[2026-10-23 20:22:44] [INFO]     • Technical Issue  (Lỗi kỹ thuật): Precision=98.26% | Recall=98.29% | F1=98.27% | Support=3,442.0
+[2026-10-23 20:22:44] [INFO] ---------------------------------------------------------------------------
+[2026-10-23 20:22:44] [INFO] 🚀 Đang huấn luyện & đánh giá: Logistic Regression (Baseline)
+[2026-10-23 20:22:45] [INFO]   ⏱️  Thời gian Train: 0.72s | Infer 5994 mẫu: 0.0475s
+[2026-10-23 20:22:45] [INFO]   🎯 Test Accuracy:           97.41%
+[2026-10-23 20:22:45] [INFO]   🎯 Test Balanced Accuracy:  96.94%
+[2026-10-23 20:22:45] [INFO]   🎯 Test Macro F1-Score:     97.14%
+[2026-10-23 20:22:45] [INFO]   🎯 Test Weighted F1-Score:  97.42%
+[2026-10-23 20:22:45] [INFO] 
+  📋 Báo cáo chi tiết từng phòng ban:
+[2026-10-23 20:22:45] [INFO]     • Payment          (Thanh toán & Giao dịch): Precision=95.15% | Recall=96.19% | F1=95.67% | Support=1,652.0
+[2026-10-23 20:22:45] [INFO]     • Return/Refund    (Đổi trả & Hoàn tiền): Precision=98.75% | Recall=96.33% | F1=97.53% | Support=900.0
+[2026-10-23 20:22:45] [INFO]     • Technical Issue  (Lỗi kỹ thuật): Precision=98.17% | Recall=98.29% | F1=98.23% | Support=3,442.0
+[2026-10-23 20:22:45] [INFO] ================================================================================
+[2026-10-23 20:22:45] [INFO] 👑 MÔ HÌNH TỐT NHẤT LÀ: Support Vector Machine (LinearSVC)
+[2026-10-23 20:22:45] [INFO]    Accuracy: 97.46% | Macro F1: 97.19%
+[2026-10-23 20:22:45] [INFO] ================================================================================
+[2026-10-23 20:22:45] [INFO] 💾 Đã lưu tóm tắt kết quả: D:\FPTU\26FALL\TMG301\project\model\results\test_evaluation_summary.json
+[2026-10-23 20:22:45] [INFO] 💾 Đã lưu bảng so sánh metrics: D:\FPTU\26FALL\TMG301\project\model\results\model_comparison_metrics.csv
+[2026-10-23 20:22:45] [INFO] 📊 Đã lưu biểu đồ so sánh: D:\FPTU\26FALL\TMG301\project\model\plots\model_comparison_metrics.png
+[2026-10-23 20:22:46] [INFO] 📊 Đã lưu Ma trận nhầm lẫn: D:\FPTU\26FALL\TMG301\project\model\plots\confusion_matrices_all_models.png
+[2026-10-23 20:22:46] [INFO] 💾 ĐÃ LƯU MÔ HÌNH XUẤT SẮC NHẤT TẠI: D:\FPTU\26FALL\TMG301\project\model\saved_models\best_ticket_router_pipeline.joblib
+[2026-10-23 20:22:46] [INFO] ================================================================================
+[2026-10-23 20:22:46] [INFO] 🎉 HOÀN THÀNH QUÁ TRÌNH HUẤN LUYỆN VÀ ĐÁNH GIÁ THÀNH CÔNG RỰC RỠ!
+[2026-10-23 20:22:46] [INFO] 📂 Thư mục chứa mô hình:  D:\FPTU\26FALL\TMG301\project\model\saved_models
+[2026-10-23 20:22:46] [INFO] 📂 Thư mục chứa đồ thị:   D:\FPTU\26FALL\TMG301\project\model\plots
+[2026-10-23 20:22:46] [INFO] 📂 Thư mục chứa kết quả: D:\FPTU\26FALL\TMG301\project\model\results
+[2026-10-23 20:22:46] [INFO] 📂 Thư mục chứa log:      D:\FPTU\26FALL\TMG301\project\model\logs
+[2026-10-23 20:22:46] [INFO] ================================================================================

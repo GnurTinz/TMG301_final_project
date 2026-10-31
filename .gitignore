@@ -1,0 +1,46 @@
+# Python environments, caches and local runtime output
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+*.egg-info/
+*.log
+!model/logs/training_latest.log
+
+# JavaScript dependencies, generated bundles and browser-test artifacts
+node_modules/
+dist/
+build/
+test-results/
+playwright-report/
+.vite/
+coverage/
+
+# Machine-local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.aws/
+.codex/
+.agents/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Raw datasets are several GB; keep the instructions, processed data and model.
+datasets/*
+!datasets/README.md
+*.zip
+*.7z
+*.tar
+*.gz
+
+# Generated knowledge-graph/cache artifacts
+graphify-out/

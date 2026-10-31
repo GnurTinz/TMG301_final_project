@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Ticket Router - CRM Điều Hướng Khiếu Nại Tự Động (TMG301)</title>
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="brand-wrapper">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <div class="brand-title">CRM Ticket Router</div>
+        <div class="brand-subtitle">Hệ thống AI Tự động Phân loại & Điều hướng Khiếu nại (TMG301)</div>
+      </div>
+    </div>
+    
+    <!-- Navigation Tabs between Router & Dashboard -->
+    <nav class="nav-tabs">
+      <a href="/" class="nav-tab-link active">
+        <span>🎫</span> Điều Hướng Khiếu Nại (Live)
+      </a>
+      <a href="/dashboard" class="nav-tab-link">
+        <span>📊</span> Model Analytics Dashboard
+      </a>
+    </nav>
+
+    <div class="nav-metrics">
+      <div class="metric-pill">
+        <span class="status-dot"></span>
+        <span>Mô hình: <strong>LinearSVC (SVM)</strong></span>
+      </div>
+      <div class="metric-pill">
+        <span>Test Accuracy: <strong>97.46%</strong></span>
+      </div>
+      <div class="metric-pill">
+        <span>Dataset: <strong>39,955 mẫu</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+      <h1>Hệ Thống CRM Điều Hướng Khiếu Nại Thông Minh</h1>
+      <p>Tự động đọc nội dung email/tin nhắn khách hàng, phân loại chủ đề (Lỗi kỹ thuật, Thanh toán, Đổi trả) và chuyển tiếp tức thì tới đúng phòng ban chuyên trách.</p>
+    </section>
+
+    <!-- Two-Panel Grid: Input on Left, Routing on Right -->
+    <div class="app-grid">
+      
+      <!-- PANEL 1: Trang Nhập Chat / Email Khiếu Nại -->
+      <section class="glass-card" id="inputCard">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="card-icon">✉️</span>
+            <h2 class="card-title">Nhập Khiếu Nại Khách Hàng</h2>
+          </div>
+          <span class="step-badge">BƯỚC 1: TIẾP NHẬN</span>
+        </div>
+
+        <!-- Quick Sample Selector -->
+        <div class="sample-section">
+          <div class="sample-title">Chọn mẫu khiếu nại thực tế để thử nghiệm nhanh:</div>
+          <div class="sample-pills" id="samplePills">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Input Form -->
+        <form id="ticketForm">
+          <div class="form-group">
+            <label class="form-label" for="customerEmail">Email Khách hàng:</label>
+            <input type="email" id="customerEmail" class="form-control" placeholder="customer@example.com" value="david.tran@gmail.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="customerMessage">
+              Nội dung Email / Tin nhắn khiếu nại:
+            </label>
+            <textarea id="customerMessage" class="form-control" placeholder="Nhập chi tiết nội dung khiếu nại của khách hàng tại đây (tiếng Anh hoặc tiếng Việt)..." required>My card is blocked after entering the wrong pin at the ATM. It swallowed my card and says card blocked. Can you please unblock my card and help me retrieve it immediately?</textarea>
+          </div>
+
+          <button type="submit" id="btnSubmit" class="btn-submit">
+            <span id="btnIcon">🚀</span>
+            <span id="btnText">Phân loại & Điều hướng CRM</span>
+            <div class="spinner" id="btnSpinner"></div>
+          </button>
+        </form>
+      </section>
+
+      <!-- PANEL 2: Trang Kết Quả Điều Hướng CRM -->
+      <section class="glass-card" id="routingCard">
+        <div class="card-header">
+          <div class="card-title-group">
+            <span class="card-icon">🎯</span>
+            <h2 class="card-title">Kết Quả Điều Hướng Phòng Ban</h2>
+          </div>
+          <span class="step-badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.3);">
+            BƯỚC 2: PHÂN PHỐI
+          </span>
+        </div>
+
+        <!-- State 1: Placeholder Khi chưa submit -->
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">📬</div>
+          <h3>Chưa có ticket nào được xử lý</h3>
+          <p>Hãy nhập nội dung hoặc chọn một mẫu khiếu nại bên cạnh và nhấn <strong>"Phân loại & Điều hướng CRM"</strong> để xem kết quả phân phối phòng ban.</p>
+        </div>
+
+        <!-- State 2: Kết quả phân phối thực tế -->
+        <div class="routing-result-view" id="resultView">
+          
+          <!-- Ticket Header Banner -->
+          <div class="ticket-info-banner">
+            <div>
+              <span style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase;">Mã Ticket CRM</span>
+              <div class="ticket-id-tag" id="ticketIdVal">TCK-20261023-XXXXXX</div>
+            </div>
+            <button class="btn-secondary" id="btnCopyTicket" title="Sao chép mã ticket">
+              <span>📋</span> Sao chép mã
+            </button>
+          </div>
+
+          <!-- Target Department Box -->
+          <div class="department-box theme-tech" id="deptBox">
+            <div class="dept-badge-row">
+              <span class="dept-label-pill" id="deptCategoryPill">Technical Issue</span>
+              <span class="badge-tag" id="priorityBadge" style="background: rgba(239, 68, 68, 0.2); color: #f87171;">Ưu tiên: High</span>
+            </div>
+            <div class="dept-name" id="deptNameVal">Phòng Hỗ trợ Kỹ thuật (Technical Support Dept)</div>
+            <div class="dept-code" id="deptCodeVal">Mã phòng ban: DEPT_TECH_SUPPORT</div>
+
+            <div class="dept-meta-grid">
+              <div class="meta-item">
+                <span>Chủ đề phát hiện</span>
+                <strong id="viNameVal">Lỗi kỹ thuật</strong>
+              </div>
+              <div class="meta-item">
+                <span>Thời hạn xử lý (SLA)</span>
+                <strong id="slaHoursVal">Trong 12 giờ</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Confidence & Probabilities -->
+          <div class="confidence-section">
+            <div class="confidence-header">
+              <span style="font-size: 0.85rem; font-weight: 600; color: #cbd5e1;">Độ tin cậy của AI (Confidence)</span>
+              <span class="confidence-score" id="confidenceVal">96.8%</span>
+            </div>
+            <div class="prob-bars">
+              <div class="prob-row">
+                <span class="prob-name">Technical Issue</span>
+                <div class="prob-progress">
+                  <div class="prob-fill tech" id="barTech" style="width: 90%;"></div>
+                </div>
+                <span class="prob-val" id="valTech">90%</span>
+              </div>
+              <div class="prob-row">
+                <span class="prob-name">Payment</span>
+                <div class="prob-progress">
+                  <div class="prob-fill payment" id="barPayment" style="width: 6%;"></div>
+                </div>
+                <span class="prob-val" id="valPayment">6%</span>
+              </div>
+              <div class="prob-row">
+                <span class="prob-name">Return/Refund</span>
+                <div class="prob-progress">
+                  <div class="prob-fill refund" id="barRefund" style="width: 4%;"></div>
+                </div>
+                <span class="prob-val" id="valRefund">4%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Automated Response Email -->
+          <div class="response-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-dim); text-transform: uppercase;">Mẫu email xác nhận tự động gửi khách hàng:</span>
+              <button class="btn-secondary" id="btnCopyEmail" style="padding: 4px 8px; font-size: 0.78rem;">
+                <span>📋</span> Copy email
+              </button>
+            </div>
+            <div class="response-box" id="responseBoxVal">
+              Kính gửi Quý khách...
+            </div>
+          </div>
+
+          <!-- Action buttons -->
+          <button type="button" class="btn-reset" id="btnNewTicket">
+            <span>🔄</span> Điều hướng khiếu nại tiếp theo
+          </button>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- History Section: Recent Routed Tickets -->
+    <section class="history-section">
+      <div class="section-header">
+        <h3 class="section-title">Nhật Ký Các Ticket Vừa Điều Hướng Gần Đây</h3>
+        <button class="btn-secondary" id="btnClearHistory" style="font-size: 0.8rem;">Xóa lịch sử</button>
+      </div>
+
+      <div class="history-card">
+        <div class="table-responsive">
+          <table class="crm-table">
+            <thead>
+              <tr>
+                <th>Mã Ticket</th>
+                <th>Khách hàng</th>
+                <th>Nội dung trích đoạn</th>
+                <th>Chủ đề phân loại</th>
+                <th>Phòng ban tiếp nhận</th>
+                <th>Độ tin cậy</th>
+                <th>Thời gian</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- JavaScript -->
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

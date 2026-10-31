@@ -1,0 +1,35 @@
+{
+    "Technical Issue": [
+        "create_account",
+        "delete_account",
+        "edit_account",
+        "recover_password",
+        "registration_problems",
+        "switch_account",
+        "contact_customer_service",
+        "contact_human_agent",
+        "delivery_options",
+        "delivery_period",
+        "cancel_order",
+        "change_order",
+        "place_order",
+        "track_order",
+        "change_shipping_address",
+        "set_up_shipping_address",
+        "newsletter_subscription"
+    ],
+    "Payment": [
+        "check_payment_methods",
+        "payment_issue",
+        "check_invoice",
+        "get_invoice",
+        "check_cancellation_fee"
+    ],
+    "Return/Refund": [
+        "check_refund_policy",
+        "get_refund",
+        "track_refund",
+        "complaint",
+        "review"
+    ]
+}
