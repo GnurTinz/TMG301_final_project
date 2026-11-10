@@ -1,50 +1,150 @@
-# Support Ticket Router - CRM Điều Hướng Khiếu Nại Khách Hàng
+# Support Ticket Router
 
-> **Dự án Môn học**: TMG301 - Multi-class Text Classification  
-> **Sinh viên thực hiện**: `gnurtinz`  
-> **Mô hình**: Support Vector Machine (LinearSVC) & Naive Bayes  
+Dự án môn **TMG301** về phân loại văn bản đa lớp, ứng dụng vào điều hướng yêu cầu hỗ trợ khách hàng. Hệ thống sử dụng **TF-IDF + LinearSVC** để phân loại nội dung, xác định phòng ban tiếp nhận, mức ưu tiên, SLA và tạo nội dung phản hồi xác nhận.
 
----
+Giao diện chính dùng **React + TypeScript**, kết nối với **Flask API**. Repository có sẵn dữ liệu đã xử lý, checkpoint và kết quả đánh giá, cho phép chạy demo mà không cần tải dữ liệu gốc hoặc huấn luyện lại.
 
-## Giao diện React mới — chạy cục bộ
+## Chức năng
 
-Giao diện React + TypeScript nằm trong `web_app/frontend`, sử dụng lại Flask API và checkpoint hiện có. Có hai màn hình: điều hướng yêu cầu và phân tích mô hình. Gradio trong `app.py`, demo Flask cũ và `run_web_demo.bat` vẫn được giữ nguyên.
+| Nhãn dự đoán | Phòng ban tiếp nhận | SLA mặc định |
+|---|---|---|
+| `Technical Issue` | Hỗ trợ kỹ thuật | 12 giờ |
+| `Payment` | Kế toán & Thanh toán | 4 giờ |
+| `Return/Refund` | CSKH & Đổi trả | 6 giờ |
 
-1. Cài backend bằng môi trường Python `pyenv`: `& 'D:\InstalledApps\MiniConda\envs\pyenv\python.exe' -m pip install -r requirements.txt`.
-2. Từ thư mục project, chạy `./run_backend_api.bat` trong terminal thứ nhất.
-3. Chạy `./run_frontend_dev.bat` trong terminal thứ hai; lần đầu script sẽ cài npm dependencies.
-4. Mở **http://127.0.0.1:5173**, chọn một mẫu thử rồi nhấn **Phân loại & điều hướng**.
+- Phân loại yêu cầu và hiển thị điểm của từng lớp.
+- Xác định mức ưu tiên theo chủ đề, từ khóa khẩn cấp và ngưỡng điểm 60%. Từ khóa khẩn cấp được xét trước quy tắc yêu cầu người xử lý kiểm tra.
+- Tạo mã ticket và nội dung phản hồi; lưu tối đa 20 ticket trong trình duyệt.
+- Hiển thị bảng so sánh mô hình, chỉ số theo lớp và các biểu đồ đánh giá.
 
-Xem [hướng dẫn kiến trúc, cài đặt, kiểm thử và triển khai](web_app/frontend/README.md) cùng [bảng đối chiếu chức năng](web_app/frontend/docs/FEATURE_PARITY.md).
+Dữ liệu huấn luyện là văn bản **tiếng Anh**; giao diện và nội dung phản hồi sử dụng tiếng Việt. Điểm của LinearSVC được tính bằng softmax trên decision scores, chưa phải xác suất đã hiệu chỉnh. Demo tạo kết quả điều hướng và mẫu phản hồi, chưa tích hợp gửi email hoặc chuyển ticket sang hệ thống CRM bên ngoài.
 
-## Nội dung repository
+## Chạy cục bộ
 
-Repository chứa source Python/React, dữ liệu đã xử lý, checkpoint, kết quả đánh giá, biểu đồ và các báo cáo [Checkpoint 1](report.md), [Report V2](reportV2.md). Có thể chạy demo bằng checkpoint hiện có mà không cần tải dữ liệu gốc hoặc train lại.
+Chạy các lệnh từ thư mục gốc repository trên Windows / PowerShell. Cần môi trường Conda **`pyenv`** và Node.js **22.12+** phù hợp với cấu hình frontend hiện tại.
 
-Dữ liệu gốc dung lượng lớn, dependencies, cache, file môi trường cá nhân và kết quả build/test được loại khỏi Git. Xem [hướng dẫn dữ liệu gốc](datasets/README.md) nếu cần tái lập xử lý dữ liệu hoặc EDA.
+### 1. Cài thư viện Python
 
----
+```powershell
+& 'D:\InstalledApps\MiniConda\envs\pyenv\python.exe' -m pip install -r requirements.txt
+```
 
-## 🌐 Đường Dẫn Demo Trực Tuyến 24/7 (Online Domain)
+Đường dẫn trên là cấu hình máy phát triển. Nếu Conda nằm ở vị trí khác, thay bằng đường dẫn Python trong môi trường `pyenv` của bạn. Giữ **scikit-learn 1.7.2** theo `requirements.txt` để tương thích với checkpoint.
 
-- 🔗 **Web Demo Trực Tiếp**: **[https://gnurtinz-tmg301-crm-router.hf.space](https://gnurtinz-tmg301-crm-router.hf.space)**  
-- 📂 **Hugging Face Space**: **[https://huggingface.co/spaces/gnurtinz/tmg301-crm-router](https://huggingface.co/spaces/gnurtinz/tmg301-crm-router)**  
-*(Xem thêm thông tin chi tiết tại file [DOMAIN_LINKS.md](DOMAIN_LINKS.md))*
+### 2. Khởi động Flask API
 
----
+Trong terminal thứ nhất:
 
-## 📊 Kết Quả Đánh Giá Trên Tập Test (5,994 Mẫu Độc Lập)
+```powershell
+.\run_backend_api.bat
+```
 
-| Hạng | Mô hình Machine Learning | Test Accuracy | Macro F1-Score | Weighted F1 | Training Time | Trạng thái |
-| :---: | :--- | :---: | :---: | :---: | :---: | :---: |
-| 🥇 | **Support Vector Machine (LinearSVC)** | **97.46%** | **97.19%** | **97.47%** | 0.50s | 🏆 *Production Ready* |
-| 🥈 | **Logistic Regression (Baseline)** | **97.41%** | **97.14%** | **97.42%** | 0.72s | *Baseline chuẩn* |
-| 🥉 | **Naive Bayes (MultinomialNB)** | **96.83%** | **96.45%** | **96.85%** | 0.31s | *Đã đánh giá* |
-| 4 | **Naive Bayes (ComplementNB)** | **96.70%** | **96.35%** | **96.72%** | 0.31s | *Đã đánh giá* |
+Script mặc định dùng Python `pyenv` tại đường dẫn trên. Có thể đặt `$env:PYTHON_EXEC` trước khi chạy nếu interpreter nằm ở vị trí khác. API chạy tại **http://127.0.0.1:5050**; kiểm tra trạng thái tại **http://127.0.0.1:5050/api/health**.
 
----
+### 3. Khởi động React frontend
 
-## 🚀 Hướng Dẫn Chạy Nhanh Trên Máy Cá Nhân
+Trong terminal thứ hai:
 
-1. **Khởi động Web Demo**: Nhấp đúp chuột vào file [`run_web_demo.bat`](run_web_demo.bat).
-2. **Huấn luyện lại mô hình**: Nhấp đúp chuột vào file [`run_training.bat`](run_training.bat).
+```powershell
+.\run_frontend_dev.bat
+```
+
+Script tự cài npm dependencies nếu chưa có Vite. Mở **http://127.0.0.1:5173**, chọn một nội dung mẫu rồi nhấn **Phân loại & điều hướng**. Vite chuyển tiếp yêu cầu API đến backend ở cổng 5050.
+
+Xem [README frontend](web_app/frontend/README.md) để cấu hình API, CORS, build và triển khai.
+
+### Các giao diện khác
+
+Backend Flask cũng phục vụ giao diện HTML tại **http://127.0.0.1:5050/** và dashboard tại **http://127.0.0.1:5050/dashboard**.
+
+Để chạy Gradio riêng:
+
+```powershell
+& 'D:\InstalledApps\MiniConda\envs\pyenv\python.exe' app.py
+```
+
+Mở địa chỉ được Gradio in trong terminal. Hai script cũ `run_web_demo.bat` và `run_training.bat` còn tham chiếu môi trường `tmg_project`; các lệnh trong README này sử dụng `pyenv`.
+
+## Dữ liệu và kết quả đánh giá
+
+Tập dữ liệu hợp nhất gồm **39.955 mẫu** từ **Banking77** và **Bitext Customer Support (BSCS)**, ánh xạ về ba nhóm chủ đề. Pipeline chia dữ liệu theo tỷ lệ **70% train / 15% validation / 15% test**, có phân tầng theo nhãn và `random_state=42`.
+
+TF-IDF sử dụng unigram và bigram. Bốn mô hình được tinh chỉnh trên tập validation; kết quả dưới đây lấy từ [bảng đánh giá đã lưu](model/results/model_comparison_metrics.csv) trên tập test **5.994 mẫu**.
+
+| Mô hình | Accuracy | Macro F1 | Weighted F1 |
+|---|---:|---:|---:|
+| **LinearSVC** | **97,46%** | **97,19%** | **97,47%** |
+| Logistic Regression | 97,41% | 97,14% | 97,42% |
+| MultinomialNB | 96,83% | 96,45% | 96,85% |
+| ComplementNB | 96,70% | 96,35% | 96,72% |
+
+Đây là kết quả trên tập dữ liệu của dự án; cần đánh giá thêm trước khi áp dụng cho dữ liệu thực tế hoặc ngôn ngữ khác.
+
+## Huấn luyện và suy luận
+
+Huấn luyện lại từ dữ liệu hợp nhất có sẵn:
+
+```powershell
+& 'D:\InstalledApps\MiniConda\envs\pyenv\python.exe' model/train_ticket_router.py
+```
+
+Lệnh này cập nhật checkpoint, log, biểu đồ và kết quả trong `model/`. Để chạy thử suy luận với các yêu cầu mẫu:
+
+```powershell
+& 'D:\InstalledApps\MiniConda\envs\pyenv\python.exe' model/router_inference.py
+```
+
+Xem [hướng dẫn dữ liệu gốc](datasets/README.md) để tái lập bước xử lý dữ liệu hoặc EDA; xem [tài liệu mô hình](model/README.md) để biết cấu hình và đầu ra huấn luyện.
+
+## Cấu trúc repository
+
+```text
+project/
+├── app.py                       # Giao diện Gradio
+├── datasets/README.md           # Hướng dẫn chuẩn bị dữ liệu gốc
+├── EDA/                         # Notebook và script khảo sát dữ liệu
+├── processing_datasets/         # Xử lý dữ liệu, ánh xạ nhãn và hợp nhất
+├── processed_datasets/          # Dữ liệu đã xử lý
+├── model/
+│   ├── config.py                # Cấu hình dữ liệu, huấn luyện và CRM
+│   ├── train_ticket_router.py   # Huấn luyện và đánh giá
+│   ├── router_inference.py      # Suy luận và quy tắc điều hướng
+│   ├── saved_models/            # Checkpoint TF-IDF + mô hình
+│   ├── results/                 # Kết quả CSV, JSON
+│   └── plots/                   # Biểu đồ đánh giá
+├── web_app/
+│   ├── app.py                   # Flask API và giao diện HTML
+│   ├── frontend/                # React + TypeScript + Vite
+│   ├── templates/               # Template Flask
+│   ├── static/                  # CSS và JavaScript cho Flask
+│   └── tests/                   # Kiểm thử API
+├── requirements.txt
+├── run_backend_api.bat
+└── run_frontend_dev.bat
+```
+
+## Kiểm tra dự án
+
+Kiểm thử Flask API:
+
+```powershell
+& 'D:\InstalledApps\MiniConda\envs\pyenv\python.exe' -m unittest discover -s web_app/tests -v
+```
+
+Kiểm tra TypeScript và build frontend sau khi cài npm dependencies:
+
+```powershell
+Set-Location web_app/frontend
+npm.cmd run build
+```
+
+Hướng dẫn kiểm thử trình duyệt nằm trong [README frontend](web_app/frontend/README.md).
+
+## Tài liệu và quy tắc Git
+
+- [Cấu hình và vận hành frontend/backend](web_app/frontend/README.md).
+- [Đối chiếu chức năng giao diện](web_app/frontend/docs/FEATURE_PARITY.md).
+- [Kết quả đánh giá chi tiết](model/results/test_evaluation_summary.json).
+- [Thông tin đường dẫn demo](DOMAIN_LINKS.md).
+
+Thư mục `draft/` lưu báo cáo nháp như `report.md`, `reportV2.md` và được loại khỏi Git. Các thư mục presentation, dependencies phục vụ dựng slide và file PowerPoint cũng được ignore để giữ cục bộ. Dữ liệu gốc, môi trường cá nhân, cache, dependencies và kết quả build/test được loại trừ theo [`.gitignore`](.gitignore).

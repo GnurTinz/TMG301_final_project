@@ -44,3 +44,13 @@ datasets/*
 
 # Generated knowledge-graph/cache artifacts
 graphify-out/
+
+# Local drafts and presentation materials (keep on disk, exclude from GitHub)
+draft/
+*[Pp]resentation*
+*.ppt
+*.pptx
+*.pptm
+*.pps
+*.ppsx
+*.ppsm
