@@ -2,7 +2,9 @@
 
 Dự án môn **TMG301** về phân loại văn bản đa lớp, ứng dụng vào điều hướng yêu cầu hỗ trợ khách hàng. Hệ thống sử dụng **TF-IDF + LinearSVC** để phân loại nội dung, xác định phòng ban tiếp nhận, mức ưu tiên, SLA và tạo nội dung phản hồi xác nhận.
 
-Giao diện chính dùng **React + TypeScript**, kết nối với **Flask API**. Repository có sẵn dữ liệu đã xử lý, checkpoint và kết quả đánh giá, cho phép chạy demo mà không cần tải dữ liệu gốc hoặc huấn luyện lại.
+Giao diện chính dùng **React + TypeScript**, kết nối với **Flask API**. Repository có sẵn dữ liệu đã xử lý, checkpoint và kết quả đánh giá, cho phép chạy demo mà không cần tải dữ liệu gốc hoặc huấn luyện lại. Mô hình chạy trên CPU, không yêu cầu GPU.
+
+Thông tin website demo và cấu hình hosting: [Đường dẫn triển khai](DOMAIN_LINKS.md).
 
 ## Chức năng
 
@@ -19,39 +21,55 @@ Giao diện chính dùng **React + TypeScript**, kết nối với **Flask API**
 
 Dữ liệu huấn luyện là văn bản **tiếng Anh**; giao diện và nội dung phản hồi sử dụng tiếng Việt. Điểm của LinearSVC được tính bằng softmax trên decision scores, chưa phải xác suất đã hiệu chỉnh. Demo tạo kết quả điều hướng và mẫu phản hồi, chưa tích hợp gửi email hoặc chuyển ticket sang hệ thống CRM bên ngoài.
 
-## Chạy cục bộ
+## Cài đặt và chạy
 
-Chạy các lệnh từ thư mục gốc repository trên Windows / PowerShell. Cần môi trường Conda **`pyenv`** và Node.js **22.12+** phù hợp với cấu hình frontend hiện tại.
+### Yêu cầu
 
-### 1. Cài thư viện Python
+- Git để clone repository.
+- **Python 3.11** là phiên bản đã được kiểm tra với checkpoint hiện có; cần `pip` để cài thư viện.
+- **Node.js 22.12+** và npm để chạy giao diện React.
 
-```powershell
-& 'D:\InstalledApps\MiniConda\envs\pyenv\python.exe' -m pip install -r requirements.txt
+Bạn có thể dùng môi trường Python riêng bằng Conda hoặc công cụ quản lý môi trường khác. Các lệnh dưới đây dùng `python` trỏ đến interpreter trong môi trường đã kích hoạt, không yêu cầu tên môi trường hay đường dẫn cài đặt cụ thể. Trên hệ thống dùng tên lệnh `python3`, thay `python` tương ứng.
+
+### 1. Clone repository và cài thư viện Python
+
+```sh
+git clone https://github.com/GnurTinz/TMG301_final_project.git
+cd TMG301_final_project
+python -m pip install -r requirements.txt
 ```
 
-Đường dẫn trên là cấu hình máy phát triển. Nếu Conda nằm ở vị trí khác, thay bằng đường dẫn Python trong môi trường `pyenv` của bạn. Giữ **scikit-learn 1.7.2** theo `requirements.txt` để tương thích với checkpoint.
+Giữ **scikit-learn 1.7.2** theo `requirements.txt` để tương thích với checkpoint. Các bước tiếp theo chạy từ thư mục gốc repository, trừ khi có lệnh chuyển thư mục.
 
 ### 2. Khởi động Flask API
 
-Trong terminal thứ nhất:
+Trong terminal thứ nhất, với môi trường Python đã kích hoạt:
 
-```powershell
-.\run_backend_api.bat
+```sh
+python web_app/app.py
 ```
 
-Script mặc định dùng Python `pyenv` tại đường dẫn trên. Có thể đặt `$env:PYTHON_EXEC` trước khi chạy nếu interpreter nằm ở vị trí khác. API chạy tại **http://127.0.0.1:5050**; kiểm tra trạng thái tại **http://127.0.0.1:5050/api/health**.
+API chạy tại **http://127.0.0.1:5050**. Mở **http://127.0.0.1:5050/api/health** để kiểm tra; khi nạp được checkpoint, API trả `status: "ready"` và `model_ready: true`.
 
 ### 3. Khởi động React frontend
 
-Trong terminal thứ hai:
+Mở terminal thứ hai tại thư mục gốc repository:
 
-```powershell
-.\run_frontend_dev.bat
+```sh
+cd web_app/frontend
+npm ci
+npm run dev
 ```
 
-Script tự cài npm dependencies nếu chưa có Vite. Mở **http://127.0.0.1:5173**, chọn một nội dung mẫu rồi nhấn **Phân loại & điều hướng**. Vite chuyển tiếp yêu cầu API đến backend ở cổng 5050.
+Mở **http://127.0.0.1:5173**, chọn một nội dung mẫu rồi nhấn **Phân loại & điều hướng**. Vite chuyển tiếp yêu cầu API đến backend ở cổng 5050. Cần giữ cả hai terminal đang chạy; dùng `Ctrl+C` để dừng từng server.
 
-Xem [README frontend](web_app/frontend/README.md) để cấu hình API, CORS, build và triển khai.
+Trên Windows PowerShell, nếu `npm` bị chặn do execution policy, dùng `npm.cmd` thay cho `npm` trong các lệnh trên.
+
+### Checkpoint đi kèm
+
+File [`model/saved_models/best_ticket_router_pipeline.joblib`](model/saved_models/best_ticket_router_pipeline.joblib) chứa pipeline **TF-IDF + LinearSVC**, danh sách nhãn, ánh xạ phòng ban và metadata đánh giá. Backend tự nạp file này khi khởi động; không cần huấn luyện lại để chạy demo.
+
+Nếu API báo mô hình chưa sẵn sàng, kiểm tra file checkpoint có trong bản clone, phiên bản scikit-learn và log khởi động backend. Có thể dùng biến môi trường `MODEL_PATH` để chọn checkpoint khác.
 
 ### Các giao diện khác
 
@@ -59,11 +77,46 @@ Backend Flask cũng phục vụ giao diện HTML tại **http://127.0.0.1:5050/*
 
 Để chạy Gradio riêng:
 
-```powershell
-& 'D:\InstalledApps\MiniConda\envs\pyenv\python.exe' app.py
+```sh
+python app.py
 ```
 
-Mở địa chỉ được Gradio in trong terminal. Hai script cũ `run_web_demo.bat` và `run_training.bat` còn tham chiếu môi trường `tmg_project`; các lệnh trong README này sử dụng `pyenv`.
+Mở địa chỉ được Gradio in trong terminal. Giao diện Flask và Gradio sử dụng cùng checkpoint với React.
+
+## Cấu hình và API
+
+Cấu hình mặc định cho phép chạy frontend/backend cùng máy mà không cần tạo file `.env`.
+
+| Biến môi trường | Thành phần | Ý nghĩa |
+|---|---|---|
+| `HOST` | Backend | Địa chỉ bind; mặc định `0.0.0.0`. Đặt `127.0.0.1` nếu chỉ muốn truy cập từ máy đang chạy. |
+| `PORT` | Backend | Cổng HTTP, mặc định `5050`. |
+| `MODEL_PATH` | Backend | Đường dẫn checkpoint thay thế; bỏ trống để dùng file đi kèm repo. |
+| `CORS_ORIGINS` | Backend | Các origin được phép, phân cách bằng dấu phẩy; mặc định cho phép localhost/127.0.0.1 ở cổng 5173 và 4173. |
+| `API_PROXY_TARGET` | Vite | Đích proxy khi phát triển, mặc định `http://127.0.0.1:5050`. |
+| `VITE_API_BASE_URL` | Frontend | Origin API khi gọi trực tiếp, không thêm `/api`; mặc định dùng URL tương đối qua proxy. |
+
+Backend đọc biến từ môi trường tiến trình, không tự nạp file `.env`. Với frontend, có thể sao chép [`web_app/frontend/.env.example`](web_app/frontend/.env.example) thành `.env.local` trong cùng thư mục, chỉnh giá trị và khởi động lại Vite. Khi triển khai frontend riêng, đặt `VITE_API_BASE_URL` trước khi build và cấu hình `CORS_ORIGINS` ở backend theo origin frontend.
+
+| Endpoint | Chức năng |
+|---|---|
+| `GET /api/health` | Kiểm tra trạng thái backend và mô hình. |
+| `POST /api/route-ticket` | Phân loại ticket và trả thông tin điều hướng. |
+| `GET /api/model-info` | Thông tin mô hình, nhãn và chỉ số đánh giá. |
+| `GET /api/samples?source=gradio` | Các nội dung mẫu để thử dự đoán. |
+| `GET /api/dashboard-data` | Dữ liệu đánh giá cho dashboard. |
+| `GET /plots/<filename>` | Biểu đồ đánh giá đã lưu. |
+
+Body JSON cho `POST /api/route-ticket`:
+
+```json
+{
+  "message": "I returned the shoes but have not received my refund.",
+  "customer_email": "customer@example.com"
+}
+```
+
+`message` là bắt buộc; `customer_email` có thể bỏ qua. Kết quả thành công có dạng `{ "success": true, "data": { ... } }`, gồm nhãn, điểm, phòng ban, mức ưu tiên, SLA và mẫu phản hồi. API trả HTTP 400 khi dữ liệu đầu vào không hợp lệ, HTTP 503 nếu mô hình chưa sẵn sàng.
 
 ## Dữ liệu và kết quả đánh giá
 
@@ -84,14 +137,14 @@ TF-IDF sử dụng unigram và bigram. Bốn mô hình được tinh chỉnh tr�
 
 Huấn luyện lại từ dữ liệu hợp nhất có sẵn:
 
-```powershell
-& 'D:\InstalledApps\MiniConda\envs\pyenv\python.exe' model/train_ticket_router.py
+```sh
+python model/train_ticket_router.py
 ```
 
 Lệnh này cập nhật checkpoint, log, biểu đồ và kết quả trong `model/`. Để chạy thử suy luận với các yêu cầu mẫu:
 
-```powershell
-& 'D:\InstalledApps\MiniConda\envs\pyenv\python.exe' model/router_inference.py
+```sh
+python model/router_inference.py
 ```
 
 Xem [hướng dẫn dữ liệu gốc](datasets/README.md) để tái lập bước xử lý dữ liệu hoặc EDA; xem [tài liệu mô hình](model/README.md) để biết cấu hình và đầu ra huấn luyện.
@@ -118,33 +171,34 @@ project/
 │   ├── templates/               # Template Flask
 │   ├── static/                  # CSS và JavaScript cho Flask
 │   └── tests/                   # Kiểm thử API
-├── requirements.txt
-├── run_backend_api.bat
-└── run_frontend_dev.bat
+├── requirements.txt             # Thư viện Python
+└── DOMAIN_LINKS.md              # Đường dẫn và cấu hình triển khai
 ```
 
 ## Kiểm tra dự án
 
 Kiểm thử Flask API:
 
-```powershell
-& 'D:\InstalledApps\MiniConda\envs\pyenv\python.exe' -m unittest discover -s web_app/tests -v
+```sh
+python -m unittest discover -s web_app/tests -v
 ```
 
 Kiểm tra TypeScript và build frontend sau khi cài npm dependencies:
 
-```powershell
-Set-Location web_app/frontend
-npm.cmd run build
+```sh
+cd web_app/frontend
+npm run build
 ```
 
-Hướng dẫn kiểm thử trình duyệt nằm trong [README frontend](web_app/frontend/README.md).
+Build kiểm tra kiểu TypeScript và tạo bundle trong `web_app/frontend/dist/`. Hướng dẫn kiểm thử trình duyệt và cấu hình triển khai chi tiết nằm trong [README frontend](web_app/frontend/README.md).
 
-## Tài liệu và quy tắc Git
+## Tài liệu liên quan
 
 - [Cấu hình và vận hành frontend/backend](web_app/frontend/README.md).
 - [Đối chiếu chức năng giao diện](web_app/frontend/docs/FEATURE_PARITY.md).
 - [Kết quả đánh giá chi tiết](model/results/test_evaluation_summary.json).
 - [Thông tin đường dẫn demo](DOMAIN_LINKS.md).
+- [Chuẩn bị dữ liệu gốc và EDA](datasets/README.md).
+- [Cấu hình mô hình và đầu ra huấn luyện](model/README.md).
 
-Thư mục `draft/` lưu báo cáo nháp như `report.md`, `reportV2.md` và được loại khỏi Git. Các thư mục presentation, dependencies phục vụ dựng slide và file PowerPoint cũng được ignore để giữ cục bộ. Dữ liệu gốc, môi trường cá nhân, cache, dependencies và kết quả build/test được loại trừ theo [`.gitignore`](.gitignore).
+Dữ liệu gốc không đi kèm repository. Dữ liệu đã xử lý, checkpoint và kết quả đánh giá được lưu trong Git; môi trường cá nhân, cache, dependencies và kết quả build/test được loại trừ theo [`.gitignore`](.gitignore).
